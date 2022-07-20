@@ -21,13 +21,13 @@ Our academic paper, which describes our method in detail and provides full exper
 > [**OCR-free Document Understanding Transformer**](https://arxiv.org/abs/2111.15664).<br>
 > [Geewook Kim](https://geewook.kim), [Teakgyu Hong](https://dblp.org/pid/183/0952.html), [Moonbin Yim](https://github.com/moonbings), [JeongYeon Nam](https://github.com/long8v), [Jinyoung Park](https://github.com/jyp1111), [Jinyeong Yim](https://jinyeong.github.io), [Wonseok Hwang](https://scholar.google.com/citations?user=M13_WdcAAAAJ), [Sangdoo Yun](https://sangdooyun.github.io), [Dongyoon Han](https://dongyoonhan.github.io), [Seunghyun Park](https://scholar.google.com/citations?user=iowjmTwAAAAJ). To appear at ECCV 2022.
 
-<img width="946" alt="image" src="./misc/overview.png">
+<img width="946" alt="image" src="misc/overview.png">
 
 ## Pre-trained Models and Web Demos
 
 Gradio web demos are available! [![Demo](https://img.shields.io/badge/Demo-Gradio-brightgreen)](#demo) [![Demo](https://img.shields.io/badge/Demo-Colab-orange)](#demo)
 |:--:|
-|![image](./misc/screenshot_gradio_demos.png)|
+|![image](misc/screenshot_gradio_demos.png)|
 - You can run the demo with `./app.py` file.
 - Sample images are available at `./misc` and more receipt images are available at [CORD dataset link](https://huggingface.co/datasets/naver-clova-ix/cord-v2).
 - Web demos are available from the links in the following table.
@@ -47,7 +47,7 @@ Please see [our paper](#how-to-cite) for more details.
 
 ## SynthDoG datasets
 
-![image](./misc/sample_synthdog.png)
+![image](misc/sample_synthdog.png)
 
 The links to the SynthDoG-generated datasets are here:
 
