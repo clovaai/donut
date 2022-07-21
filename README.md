@@ -52,9 +52,9 @@ Please see [our paper](#how-to-cite) for more details.
 The links to the SynthDoG-generated datasets are here:
 
 - [`synthdog-en`](https://huggingface.co/datasets/naver-clova-ix/synthdog-en): English, 0.5M.
-- [`synthdog-zh`](https://huggingface.co/datasets/naver-clova-ix/synthdog-en): Chinese, 0.5M.
-- [`synthdog-ja`](https://huggingface.co/datasets/naver-clova-ix/synthdog-en): Japanese, 0.5M.
-- [`synthdog-ko`](https://huggingface.co/datasets/naver-clova-ix/synthdog-en): Korean, 0.5M.
+- [`synthdog-zh`](https://huggingface.co/datasets/naver-clova-ix/synthdog-zh): Chinese, 0.5M.
+- [`synthdog-ja`](https://huggingface.co/datasets/naver-clova-ix/synthdog-ja): Japanese, 0.5M.
+- [`synthdog-ko`](https://huggingface.co/datasets/naver-clova-ix/synthdog-ko): Korean, 0.5M.
 
 To generate synthetic datasets with our SynthDoG, please see `./synthdog/README.md` and [our paper](#how-to-cite) for details.
 
