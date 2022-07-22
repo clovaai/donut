@@ -108,15 +108,15 @@ dataset_name
               .
 
 > cat dataset_name/test/metadata.jsonl
-{"file_name": {image_path0}, "ground_truth": "{\"gt_parse\": {ground_truth_parse}, ... {other_meta_data} ... }"}
-{"file_name": {image_path1}, "ground_truth": "{\"gt_parse\": {ground_truth_parse}, ... {other_meta_data} ... }"}
+{"file_name": {image_path0}, "ground_truth": "{\"gt_parse\": {ground_truth_parse}, ... {other_metadata_not_used} ... }"}
+{"file_name": {image_path1}, "ground_truth": "{\"gt_parse\": {ground_truth_parse}, ... {other_metadata_not_used} ... }"}
      .
      .
 ```
 
 - The structure of `metadata.jsonl` file is in [JSON Lines text format](https://jsonlines.org), i.e., `.jsonl`. Each line consists of
-  - `file_name` : relative path to the image file
-  - `ground_truth` : string format (json dumped), the dictionary contains either `gt_parse` or `gt_parses`
+  - `file_name` : relative path to the image file.
+  - `ground_truth` : string format (json dumped), the dictionary contains either `gt_parse` or `gt_parses`. Other fields (metadata) can be added to the dictionary but will not be used.
 - `donut` interprets all tasks as a JSON prediction problem. As a result, all `donut` model training share a same pipeline. For training and inference, the only thing to do is preparing `gt_parse` or `gt_parses` for the task in format described below.
 
 #### For Document Classification
