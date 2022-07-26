@@ -4,9 +4,10 @@
 
 [![Paper](https://img.shields.io/badge/Paper-arxiv.2111.15664-red)](https://arxiv.org/abs/2111.15664)
 [![Conference](https://img.shields.io/badge/ECCV-2022-blue)](#how-to-cite)
-[![Pypi](https://img.shields.io/badge/pypi-v1.0.3-yellow)](https://pypi.org/project/donut-python)
 [![Demo](https://img.shields.io/badge/Demo-Gradio-brightgreen)](#demo)
 [![Demo](https://img.shields.io/badge/Demo-Colab-orange)](#demo)
+[![PyPI](https://img.shields.io/pypi/v/donut-python?color=yellow&label=pip%20install%20donut-python)](https://pypi.org/project/donut-python)
+[![Downloads](https://static.pepy.tech/personalized-badge/donut-python?period=total&units=international_system&left_color=grey&right_color=yellow&left_text=downloads)](https://pepy.tech/project/donut-python)
 
 Official Implementation of Donut and SynthDoG
 
@@ -64,7 +65,8 @@ To generate synthetic datasets with our SynthDoG, please see `./synthdog/README.
 
 ## Software installation
 
-[![Pypi](https://img.shields.io/badge/pypi-v1.0.3-yellow)](https://pypi.org/project/donut-python)
+[![PyPI](https://img.shields.io/pypi/v/donut-python?color=yellow&label=pip%20install%20donut-python)](https://pypi.org/project/donut-python)
+[![Downloads](https://static.pepy.tech/personalized-badge/donut-python?period=total&units=international_system&left_color=grey&right_color=yellow&left_text=downloads)](https://pepy.tech/project/donut-python)
 
 ```bash
 pip install donut-python
