@@ -6,8 +6,8 @@
 [![Conference](https://img.shields.io/badge/ECCV-2022-blue)](#how-to-cite)
 [![Demo](https://img.shields.io/badge/Demo-Gradio-brightgreen)](#demo)
 [![Demo](https://img.shields.io/badge/Demo-Colab-orange)](#demo)
-[![PyPI](https://img.shields.io/pypi/v/donut-python?color=yellow&label=pip%20install%20donut-python)](https://pypi.org/project/donut-python)
-[![Downloads](https://static.pepy.tech/personalized-badge/donut-python?period=total&units=international_system&left_color=grey&right_color=yellow&left_text=downloads)](https://pepy.tech/project/donut-python)
+[![PyPI](https://img.shields.io/pypi/v/donut-python?color=green&label=pip%20install%20donut-python)](https://pypi.org/project/donut-python)
+[![Downloads](https://static.pepy.tech/personalized-badge/donut-python?period=total&units=international_system&left_color=grey&right_color=green&left_text=downloads)](https://pepy.tech/project/donut-python)
 
 Official Implementation of Donut and SynthDoG
 
@@ -65,8 +65,8 @@ To generate synthetic datasets with our SynthDoG, please see `./synthdog/README.
 
 ## Software installation
 
-[![PyPI](https://img.shields.io/pypi/v/donut-python?color=yellow&label=pip%20install%20donut-python)](https://pypi.org/project/donut-python)
-[![Downloads](https://static.pepy.tech/personalized-badge/donut-python?period=total&units=international_system&left_color=grey&right_color=yellow&left_text=downloads)](https://pepy.tech/project/donut-python)
+[![PyPI](https://img.shields.io/pypi/v/donut-python?color=green&label=pip%20install%20donut-python)](https://pypi.org/project/donut-python)
+[![Downloads](https://static.pepy.tech/personalized-badge/donut-python?period=total&units=international_system&left_color=grey&right_color=green&left_text=downloads)](https://pepy.tech/project/donut-python)
 
 ```bash
 pip install donut-python
@@ -81,6 +81,12 @@ conda activate donut_official
 pip install .
 ```
 
+We tested [donut](https://github.com/clovaai/donut) with:
+- [torch](https://github.com/pytorch/pytorch) == 1.11.0+cu113 
+- [torchvision](https://github.com/pytorch/vision) == 0.12.0+cu113
+- [pytorch-lightning](https://github.com/Lightning-AI/lightning) == 1.6.4
+- [transformers](https://github.com/huggingface/transformers) == 4.11.3
+- [timm](https://github.com/rwightman/pytorch-image-models) == 0.5.4
 
 ## Getting Started
 
