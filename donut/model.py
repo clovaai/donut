@@ -108,6 +108,7 @@ class SwinEncoder(nn.Module):
             - rotate (if align_long_axis is True and image is not aligned longer axis with canvas)
             - pad
         """
+        img = img.convert("RGB")
         if self.align_long_axis and (
             (self.input_size[0] > self.input_size[1] and img.width > img.height)
             or (self.input_size[0] < self.input_size[1] and img.width < img.height)
