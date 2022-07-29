@@ -19,7 +19,7 @@ from donut import DonutModel, JSONParseEvaluator, load_json, save_json
 
 
 def test(args):
-    pretrained_model = DonutModel.from_pretrained(args.pretrained_path)
+    pretrained_model = DonutModel.from_pretrained(args.pretrained_model_name_or_path)
 
     if torch.cuda.is_available():
         pretrained_model.half()
@@ -74,7 +74,7 @@ def test(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--pretrained_path", type=str)
+    parser.add_argument("--pretrained_model_name_or_path", type=str)
     parser.add_argument("--dataset_name_or_path", type=str)
     parser.add_argument("--split", type=str, default="test")
     parser.add_argument("--task_name", type=str, default=None)
