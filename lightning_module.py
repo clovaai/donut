@@ -114,7 +114,7 @@ class DonutModelPLModule(pl.LightningModule):
             )
 
         if self.config.get("max_steps", None):
-            max_iter = min(self.config.max_steps, max_iter)
+            max_iter = min(self.config.max_steps, max_iter) if max_iter is not None else self.config.max_steps
 
         assert max_iter is not None
         optimizer = torch.optim.Adam(self.parameters(), lr=self.config.lr)
