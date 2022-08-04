@@ -61,6 +61,18 @@ def train(config):
     datasets = {"train": [], "validation": []}
     for i, dataset_name_or_path in enumerate(config.dataset_name_or_paths):
         task_name = os.path.basename(dataset_name_or_path)  # e.g., cord-v2, docvqa, rvlcdip, ...
+        
+        # add categorical special tokens (optional)
+        if task_name == "rvlcdip":
+            model_module.model.decoder.add_special_tokens([
+                "<advertisement/>", "<budget/>", "<email/>", "<file_folder/>", 
+                "<form/>", "<handwritten/>", "<invoice/>", "<letter/>", 
+                "<memo/>", "<news_article/>", "<presentation/>", "<questionnaire/>", 
+                "<resume/>", "<scientific_publication/>", "<scientific_report/>", "<specification/>"
+            ])
+        if task_name == "docvqa":
+            model_module.model.decoder.add_special_tokens(["<yes/>", "<no/>"])
+            
         for split in ["train", "validation"]:
             datasets[split].append(
                 DonutDataset(
