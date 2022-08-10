@@ -1,0 +1,22 @@
+resume_from_checkpoint_path: null 
+result_path: "./result"
+pretrained_model_name_or_path: "naver-clova-ix/donut-base"
+dataset_name_or_paths: ["./dataset/rvlcdip"] # should be prepared from https://www.cs.cmu.edu/~aharley/rvl-cdip/
+sort_json_key: True
+train_batch_sizes: [2]
+val_batch_sizes: [4]
+input_size: [2560, 1920]
+max_length: 8
+align_long_axis: False
+num_nodes: 8
+seed: 2022
+lr: 2e-5
+warmup_steps: 10000
+num_training_samples_per_epoch: 320000
+max_epochs: 100
+max_steps: null
+num_workers: 8
+val_check_interval: 1.0
+check_val_every_n_epoch: 1
+gradient_clip_val: 1.0
+verbose: True
