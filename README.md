@@ -62,6 +62,7 @@ To generate synthetic datasets with our SynthDoG, please see `./synthdog/README.
 ## Updates
 
 **_2022-08-12_** Donut 🍩 is also available at [huggingface/transformers 🤗](https://huggingface.co/docs/transformers/main/en/model_doc/donut) (contributed by [@NielsRogge](https://github.com/NielsRogge)).<br>
+**_2022-08-05_** A well-executed hands-on tutorial on donut 🍩 is published at [Towards Data Science](https://towardsdatascience.com/ocr-free-document-understanding-with-donut-1acfbdf099be) (written by [@estaudere](https://github.com/estaudere)).<br>
 **_2022-07-20_** First Commit, We release our code, model weights, synthetic data and generator.
 
 ## Software installation
@@ -130,7 +131,8 @@ dataset_name
 
 #### For Document Classification
 The `gt_parse` follows the format of `{"class" : {class_name}}`, for example, `{"class" : "scientific_report"}` or `{"class" : "presentation"}`.
-- Google colab demo is available [here](https://colab.research.google.com/drive/1xUDmLqlthx8A8rWKLMSLThZ7oeRJkDuU?usp=sharing). 
+- Google colab demo is available [here](https://colab.research.google.com/drive/1xUDmLqlthx8A8rWKLMSLThZ7oeRJkDuU?usp=sharing).
+- Gradio web demo is available [here](https://huggingface.co/spaces/nielsr/donut-rvlcdip).
 
 #### For Document Information Extraction
 The `gt_parse` is a JSON object that contains full information of the document image, for example, the JSON object for a receipt may look like `{"menu" : [{"nm": "ICE BLACKCOFFEE", "cnt": "2", ...}, ...], ...}`.
@@ -142,6 +144,7 @@ The `gt_parse` is a JSON object that contains full information of the document i
 The `gt_parses` follows the format of `[{"question" : {question_sentence}, "answer" : {answer_candidate_1}}, {"question" : {question_sentence}, "answer" : {answer_candidate_2}}, ...]`, for example, `[{"question" : "what is the model name?", "answer" : "donut"}, {"question" : "what is the model name?", "answer" : "document understanding transformer"}]`.
 - DocVQA Task1 has multiple answers, hence `gt_parses` should be a list of dictionary that contains a pair of question and answer.
 - Google colab demo is available [here](https://colab.research.google.com/drive/1Z4WG8Wunj3HE0CERjt608ALSgSzRC9ig?usp=sharing).
+- Gradio web demo is available [here](https://huggingface.co/spaces/nielsr/donut-docvqa).
 
 #### For (Psuedo) Text Reading Task
 The `gt_parse` looks like `{"text_sequence" : "word1 word2 word3 ... "}`
