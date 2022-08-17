@@ -8,7 +8,8 @@ val_batch_sizes: [4]
 input_size: [2560, 1920]
 max_length: 128
 align_long_axis: False
-num_nodes: 8
+# num_nodes: 8 # memo: donut-base-finetuned-docvqa was trained with 8 nodes
+num_nodes: 1
 seed: 2022
 lr: 3e-5
 warmup_steps: 10000
