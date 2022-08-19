@@ -190,7 +190,7 @@ With the trained model, test images and ground truth parses, you can get inferen
 ```bash
 python test.py --dataset_name_or_path naver-clova-ix/cord-v2 --pretrained_model_name_or_path ./result/train_cord/test_experiment --save_path ./result/output.json
 100%|█████████████| 100/100 [00:37<00:00,  2.67it/s]
-{'accuracies': [0.7778, 1.0, {...} , 0.9689], 'mean_accuracy': 0.9388447875172169} length : 100
+Total number of samples: 100, Tree Edit Distance (TED) based accuracy score: 0.9388447875172169, F1 accuracy score: 0.9155107187894073
 ```
 
 Some important arguments:
