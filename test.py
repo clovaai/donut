@@ -32,9 +32,11 @@ def test(args):
     if args.save_path:
         os.makedirs(os.path.dirname(args.save_path), exist_ok=True)
 
-    output_list = []
+    predictions = []
+    ground_truths = []
     accs = []
 
+    evaluator = JSONParseEvaluator()
     dataset = load_dataset(args.dataset_name_or_path, split=args.split)
 
     for idx, sample in tqdm(enumerate(dataset), total=len(dataset)):
@@ -52,24 +54,35 @@ def test(args):
             gt = ground_truth["gt_parse"]
             score = float(output["class"] == gt["class"])
         elif args.task_name == "docvqa":
-            score = 0.0  # note: docvqa is evaluated on the official website
+            # Note: we evaluated the model on the official website.
+            # In this script, an exact-match based score will be returned instead
+            gt = ground_truth["gt_parses"]
+            answers = set([qa_parse["answer"] for qa_parse in gt])
+            score = float(output["answer"] in answers)
         else:
             gt = ground_truth["gt_parse"]
-            evaluator = JSONParseEvaluator()
             score = evaluator.cal_acc(output, gt)
 
         accs.append(score)
 
-        output_list.append(output)
+        predictions.append(output)
+        ground_truths.append(gt)
 
-    scores = {"accuracies": accs, "mean_accuracy": np.mean(accs)}
-    print(scores, f"length : {len(accs)}")
+    scores = {
+        "ted_accuracies": accs,
+        "ted_accuracy": np.mean(accs),
+        "f1_accuracy": evaluator.cal_f1(predictions, ground_truths),
+    }
+    print(
+        f"Total number of samples: {len(accs)}, Tree Edit Distance (TED) based accuracy score: {scores['ted_accuracy']}, F1 accuracy score: {scores['f1_accuracy']}"
+    )
 
     if args.save_path:
-        scores["predictions"] = output_list
+        scores["predictions"] = predictions
+        scores["ground_truths"] = ground_truths
         save_json(args.save_path, scores)
 
-    return output_list
+    return predictions
 
 
 if __name__ == "__main__":
@@ -84,4 +97,4 @@ if __name__ == "__main__":
     if args.task_name is None:
         args.task_name = os.path.basename(args.dataset_name_or_path)
 
-    predicts = test(args)
+    predictions = test(args)
