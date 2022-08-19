@@ -15,7 +15,7 @@ lr: 2e-5
 warmup_steps: 10000
 num_training_samples_per_epoch: 320000
 max_epochs: 100
-max_steps: null
+max_steps: -1
 num_workers: 8
 val_check_interval: 1.0
 check_val_every_n_epoch: 1
