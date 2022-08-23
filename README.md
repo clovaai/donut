@@ -35,7 +35,7 @@ Gradio web demos are available! [![Demo](https://img.shields.io/badge/Demo-Gradi
 
 |Task|Sec/Img|Score|Trained Model|<div id="demo">Demo</div>|
 |---|---|---|---|---|
-| [CORD](https://github.com/clovaai/cord) (Document Parsing)   |   0.7 /<br> 0.7 /<br> 1.2   |  93.9 /<br> 93.6 /<br> 93.5    | [donut-base-finetuned-cord-v2](https://huggingface.co/naver-clova-ix/donut-base-finetuned-cord-v2/tree/official) (1280) /<br> [donut-base-finetuned-cord-v1](https://huggingface.co/naver-clova-ix/donut-base-finetuned-cord-v1/tree/official) (1280) /<br> [donut-base-finetuned-cord-v1-2560](https://huggingface.co/naver-clova-ix/donut-base-finetuned-cord-v1-2560/tree/official) | [gradio space web demo](https://huggingface.co/spaces/naver-clova-ix/donut-base-finetuned-cord-v2),<br>[google colab demo](https://colab.research.google.com/drive/1o07hty-3OQTvGnc_7lgQFLvvKQuLjqiw?usp=sharing) |
+| [CORD](https://github.com/clovaai/cord) (Document Parsing)   |   0.7 /<br> 0.7 /<br> 1.2   |  93.7 /<br> 93.5 /<br> 93.5    | [donut-base-finetuned-cord-v2](https://huggingface.co/naver-clova-ix/donut-base-finetuned-cord-v2/tree/official) (1280) /<br> [donut-base-finetuned-cord-v1](https://huggingface.co/naver-clova-ix/donut-base-finetuned-cord-v1/tree/official) (1280) /<br> [donut-base-finetuned-cord-v1-2560](https://huggingface.co/naver-clova-ix/donut-base-finetuned-cord-v1-2560/tree/official) | [gradio space web demo](https://huggingface.co/spaces/naver-clova-ix/donut-base-finetuned-cord-v2),<br>[google colab demo](https://colab.research.google.com/drive/1o07hty-3OQTvGnc_7lgQFLvvKQuLjqiw?usp=sharing) |
 | [Train Ticket](https://github.com/beacandler/EATEN) (Document Parsing)   |   0.6   |  98.8    | [donut-base-finetuned-zhtrainticket](https://huggingface.co/naver-clova-ix/donut-base-finetuned-zhtrainticket/tree/official) | [google colab demo](https://colab.research.google.com/drive/16O-hMvGiXrYZnlXA_tfJ9_q760YcLoOj?usp=sharing) |
 | [RVL-CDIP](https://www.cs.cmu.edu/~aharley/rvl-cdip) (Document Classification)     |  0.75   |   95.3      | [donut-base-finetuned-rvlcdip](https://huggingface.co/naver-clova-ix/donut-base-finetuned-rvlcdip/tree/official) | [gradio space web demo](https://huggingface.co/spaces/nielsr/donut-rvlcdip),<br>[google colab demo](https://colab.research.google.com/drive/1xUDmLqlthx8A8rWKLMSLThZ7oeRJkDuU?usp=sharing) |
 | [DocVQA Task1](https://rrc.cvc.uab.es/?ch=17) (Document VQA) |  0.78       | 67.5 | [donut-base-finetuned-docvqa](https://huggingface.co/naver-clova-ix/donut-base-finetuned-docvqa/tree/official) | [gradio space web demo](https://huggingface.co/spaces/nielsr/donut-docvqa),<br>[google colab demo](https://colab.research.google.com/drive/1Z4WG8Wunj3HE0CERjt608ALSgSzRC9ig?usp=sharing) |
@@ -61,6 +61,7 @@ To generate synthetic datasets with our SynthDoG, please see `./synthdog/README.
 
 ## Updates
 
+**_2022-08-23_** New version 1.0.7 is released (`pip install donut-python --upgrade`).<br>
 **_2022-08-12_** Donut 🍩 is also available at [huggingface/transformers 🤗](https://huggingface.co/docs/transformers/main/en/model_doc/donut) (contributed by [@NielsRogge](https://github.com/NielsRogge)).<br>
 **_2022-08-05_** A well-executed hands-on tutorial on donut 🍩 is published at [Towards Data Science](https://towardsdatascience.com/ocr-free-document-understanding-with-donut-1acfbdf099be) (written by [@estaudere](https://github.com/estaudere)).<br>
 **_2022-07-20_** First Commit, We release our code, model weights, synthetic data and generator.
@@ -189,8 +190,8 @@ With the trained model, test images and ground truth parses, you can get inferen
 
 ```bash
 python test.py --dataset_name_or_path naver-clova-ix/cord-v2 --pretrained_model_name_or_path ./result/train_cord/test_experiment --save_path ./result/output.json
-100%|█████████████| 100/100 [00:37<00:00,  2.67it/s]
-Total number of samples: 100, Tree Edit Distance (TED) based accuracy score: 0.9388447875172169, F1 accuracy score: 0.9155107187894073
+100%|█████████████| 100/100 [00:35<00:00,  2.80it/s]
+Total number of samples: 100, Tree Edit Distance (TED) based accuracy score: 0.9374973163596032, F1 accuracy score: 0.8406020841373987
 ```
 
 Some important arguments:
