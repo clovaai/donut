@@ -50,7 +50,7 @@ setup(
     ),
     python_requires=">=3.7",
     install_requires=[
-        "transformers>=4.11.3",
+        "transformers>=4.21.1",
         "timm",
         "datasets[vision]",
         "pytorch-lightning>=1.6.4",
