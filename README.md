@@ -9,7 +9,7 @@
 [![PyPI](https://img.shields.io/pypi/v/donut-python?color=green&label=pip%20install%20donut-python)](https://pypi.org/project/donut-python)
 [![Downloads](https://static.pepy.tech/personalized-badge/donut-python?period=total&units=international_system&left_color=grey&right_color=green&left_text=Downloads)](https://pepy.tech/project/donut-python)
 
-Official Implementation of Donut and SynthDoG
+Official Implementation of Donut and SynthDoG | [Paper](https://arxiv.org/abs/2111.15664) | [Slide](https://docs.google.com/presentation/d/1gv3A7t4xpwwNdpxV_yeHzEOMy-exJCAz6AlAI9O5fS8/edit?usp=sharing) | [Poster](https://docs.google.com/presentation/d/1m1f8BbAm5vxPcqynn_MbFfmQAlHQIR5G72-hQUFS2sk/edit?usp=sharing)
 
 </div>
 
@@ -61,7 +61,7 @@ To generate synthetic datasets with our SynthDoG, please see `./synthdog/README.
 
 ## Updates
 
-**_2022-08-23_** New version 1.0.7 is released (`pip install donut-python --upgrade`). See [1.0.7 Release Notes](https://github.com/clovaai/donut/releases/tag/1.0.7).<br>
+**_2022-10-05_** New version 1.0.8 is released (`pip install donut-python --upgrade`). See [1.0.8 Release Notes](https://github.com/clovaai/donut/releases/tag/1.0.8).<br>
 **_2022-08-12_** Donut 🍩 is also available at [huggingface/transformers 🤗](https://huggingface.co/docs/transformers/main/en/model_doc/donut) (contributed by [@NielsRogge](https://github.com/NielsRogge)). `donut-python` loads the pre-trained weights from the `official` branch of the model repositories. See [1.0.5 Release Notes](https://github.com/clovaai/donut/releases/tag/1.0.5).<br>
 **_2022-08-05_** A well-executed hands-on tutorial on donut 🍩 is published at [Towards Data Science](https://towardsdatascience.com/ocr-free-document-understanding-with-donut-1acfbdf099be) (written by [@estaudere](https://github.com/estaudere)).<br>
 **_2022-07-20_** First Commit, We release our code, model weights, synthetic data and generator.
