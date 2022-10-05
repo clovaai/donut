@@ -176,13 +176,15 @@ class JSONParseEvaluator:
         return flatten_data
 
     @staticmethod
-    def update_cost(label1: str, label2: str):
+    def update_cost(node1: Node, node2: Node):
         """
         Update cost for tree edit distance.
         If both are leaf node, calculate string edit distance between two labels (special token '<leaf>' will be ignored).
         If one of them is leaf node, cost is length of string in leaf node + 1.
         If neither are leaf node, cost is 0 if label1 is same with label2 othewise 1
         """
+        label1 = node1.label
+        label2 = node2.label
         label1_leaf = "<leaf>" in label1
         label2_leaf = "<leaf>" in label2
         if label1_leaf == True and label2_leaf == True:
@@ -216,8 +218,8 @@ class JSONParseEvaluator:
 
         if isinstance(data, dict):
             new_data = dict()
-            for key, value in sorted(data.items()):
-                value = self.normalize_dict(value)
+            for key in sorted(data.keys(), key=lambda k: (len(k), k)):
+                value = self.normalize_dict(data[key])
                 if value:
                     if not isinstance(value, list):
                         value = [value]
@@ -230,11 +232,10 @@ class JSONParseEvaluator:
                     item = self.normalize_dict(item)
                     if item:
                         new_data.append(item)
-                new_data = sorted(new_data, key=lambda x: str(x.keys())+str(x.values()))
             else:
-                new_data = sorted([str(item) for item in data if type(item) in {str, int, float} and str(item)])
+                new_data = [str(item).strip() for item in data if type(item) in {str, int, float} and str(item).strip()]
         else:
-            new_data = [str(data)]
+            new_data = [str(data).strip()]
 
         return new_data
 
