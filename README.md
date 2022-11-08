@@ -202,12 +202,12 @@ Some important arguments:
 
 ## How to Cite
 If you find this work useful to you, please cite:
-```
-@article{kim2021donut,
-   title={OCR-free Document Understanding Transformer},
-   author={Kim, Geewook and Hong, Teakgyu and Yim, Moonbin and Nam, JeongYeon and Park, Jinyoung and Yim, Jinyeong and Hwang, Wonseok and Yun, Sangdoo and Han, Dongyoon and Park, Seunghyun},
-   journal={arXiv preprint arXiv:2111.15664},
-   year={2021}
+```bibtex
+@inproceedings{kim2022donut,
+  title     = {OCR-Free Document Understanding Transformer},
+  author    = {Kim, Geewook and Hong, Teakgyu and Yim, Moonbin and Nam, JeongYeon and Park, Jinyoung and Yim, Jinyeong and Hwang, Wonseok and Yun, Sangdoo and Han, Dongyoon and Park, Seunghyun},
+  booktitle = {European Conference on Computer Vision (ECCV)},
+  year      = {2022}
 }
 ```
 
