@@ -24,8 +24,6 @@ def test(args):
     if torch.cuda.is_available():
         pretrained_model.half()
         pretrained_model.to("cuda")
-    else:
-        pretrained_model.encoder.to(torch.bfloat16)
 
     pretrained_model.eval()
 

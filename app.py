@@ -52,8 +52,6 @@ if __name__ == "__main__":
         pretrained_model.half()
         device = torch.device("cuda")
         pretrained_model.to(device)
-    else:
-        pretrained_model.encoder.to(torch.bfloat16)
 
     pretrained_model.eval()
 
