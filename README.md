@@ -16,7 +16,7 @@ Official Implementation of Donut and SynthDoG | [Paper](https://arxiv.org/abs/21
 ## Introduction
 
 **Donut** 🍩, **Do**cume**n**t **u**nderstanding **t**ransformer, is a new method of document understanding that utilizes an OCR-free end-to-end Transformer model. Donut does not require off-the-shelf OCR engines/APIs, yet it shows state-of-the-art performances on various visual document understanding tasks, such as visual document classification or information extraction (a.k.a. document parsing). 
-In addition, we present **SynthDoG** 🐶, **Synth**etic **Do**cument **G**enerator, that helps the model pre-training to be flexible on vairous languages and domains.
+In addition, we present **SynthDoG** 🐶, **Synth**etic **Do**cument **G**enerator, that helps the model pre-training to be flexible on various languages and domains.
 
 Our academic paper, which describes our method in detail and provides full experimental results and analyses, can be found here:<br>
 > [**OCR-free Document Understanding Transformer**](https://arxiv.org/abs/2111.15664).<br>
@@ -147,7 +147,7 @@ The `gt_parses` follows the format of `[{"question" : {question_sentence}, "answ
 - Google colab demo is available [here](https://colab.research.google.com/drive/1Z4WG8Wunj3HE0CERjt608ALSgSzRC9ig?usp=sharing).
 - Gradio web demo is available [here](https://huggingface.co/spaces/nielsr/donut-docvqa).
 
-#### For (Psuedo) Text Reading Task
+#### For (Pseudo) Text Reading Task
 The `gt_parse` looks like `{"text_sequence" : "word1 word2 word3 ... "}`
 - This task is also a pre-training task of Donut model.
 - You can use our **SynthDoG** 🐶 to generate synthetic images for the text reading task with proper `gt_parse`. See `./synthdog/README.md` for details.
