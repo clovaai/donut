@@ -88,8 +88,8 @@ class SynthDoG(templates.Template):
         roi = data["roi"]
 
         # split
-        split = self.split_indexes[idx % len(self.split_indexes)]
-        output_dirpath = os.path.join(root, self.splits[split])
+        split_idx = self.split_indexes[idx % len(self.split_indexes)]
+        output_dirpath = os.path.join(root, self.splits[split_idx])
 
         # save image
         image_filename = f"image_{idx}.jpg"
