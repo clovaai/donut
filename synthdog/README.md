@@ -29,13 +29,13 @@ synthtiger -o ./outputs/SynthDoG_en -c 50 -w 4 -v template.py SynthDoG config_en
      .
  'quality': [50, 95],
  'short_size': [720, 1024]}
-Generated 1 data
-Generated 2 data
-Generated 3 data
+Generated 1 data (task 3)
+Generated 2 data (task 0)
+Generated 3 data (task 1)
      .
      .
-Generated 49 data
-Generated 50 data
+Generated 49 data (task 48)
+Generated 50 data (task 49)
 46.32 seconds elapsed
 ```
 
@@ -44,6 +44,7 @@ Some important arguments:
 - `-o` : directory path to save data.
 - `-c` : number of data to generate.
 - `-w` : number of workers.
+- `-s` : random seed.
 - `-v` : print error messages.
 
 To generate ECJK samples:
