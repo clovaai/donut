@@ -179,8 +179,8 @@ Epoch 29: 100%|█████████████| 200/200 [01:49<00:00,  1
 Some important arguments:
 
 - `--config` : config file path for model training.
-- `--pretrained_model_name_or_path` : string format, model name in huggingface modelhub or local path.
-- `--dataset_name_or_paths` : string format (json dumped), list of dataset names in huggingface datasets or local paths.
+- `--pretrained_model_name_or_path` : string format, model name in Hugging Face modelhub or local path.
+- `--dataset_name_or_paths` : string format (json dumped), list of dataset names in Hugging Face datasets or local paths.
 - `--result_path` : file path to save model outputs/artifacts.
 - `--exp_version` : used for experiment versioning. The output files are saved at `{result_path}/{exp_version}/*`
 
@@ -196,8 +196,8 @@ Total number of samples: 100, Tree Edit Distance (TED) based accuracy score: 0.9
 
 Some important arguments:
 
-- `--dataset_name_or_path` : string format, the target dataset name in huggingface datasets or local path.
-- `--pretrained_model_name_or_path` : string format, the model name in huggingface modelhub or local path.
+- `--dataset_name_or_path` : string format, the target dataset name in Hugging Face datasets or local path.
+- `--pretrained_model_name_or_path` : string format, the model name in Hugging Face modelhub or local path.
 - `--save_path`: file path to save predictions and scores.
 
 ## How to Cite
