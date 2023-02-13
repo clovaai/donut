@@ -21,11 +21,11 @@ from timm.data.constants import IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD
 from timm.models.swin_transformer import SwinTransformer
 from torchvision import transforms
 from torchvision.transforms.functional import resize, rotate
-from transformers import MBartConfig, MBartForCausalLM, XLMRobertaTokenizer
+from transformers import MBartConfig, MBartForCausalLM, XLMRobertaTokenizer, BertJapaneseTokenizer  # noqa
 from transformers.file_utils import ModelOutput
 from transformers.modeling_utils import PretrainedConfig, PreTrainedModel
 
-from donut.detection import FieldMetadata
+from donut.detection import Detector, FieldMetadata
 
 
 class SwinEncoder(nn.Module):
@@ -456,6 +456,11 @@ class DonutModel(PreTrainedModel):
             max_position_embeddings=self.config.max_position_embeddings,
             decoder_layer=self.config.decoder_layer,
             name_or_path=self.config.name_or_path,
+        )
+        self.detector = Detector(
+            input_size=config.input_size,
+            discard_threshold=0.01,  # TODO: parameterize
+            alpha=8.0,  # TODO: parameterize
         )
 
     def forward(

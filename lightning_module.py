@@ -18,7 +18,7 @@ from timm.data.constants import IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD
 from torch.nn.utils.rnn import pad_sequence
 from torch.optim.lr_scheduler import LambdaLR
 from torch.utils.data import DataLoader
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, BertJapaneseTokenizer  # noqa
 
 # from donut import DonutConfig, DonutModel
 from donut.model_custom import DonutConfig, DonutModel
