@@ -3,6 +3,7 @@ Donut
 Copyright (c) 2022-present NAVER Corp.
 MIT License
 """
+import json
 import math
 import random
 import re
@@ -17,8 +18,10 @@ from timm.data.constants import IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD
 from torch.nn.utils.rnn import pad_sequence
 from torch.optim.lr_scheduler import LambdaLR
 from torch.utils.data import DataLoader
+from transformers import AutoTokenizer
 
-from donut import DonutConfig, DonutModel
+# from donut import DonutConfig, DonutModel
+from donut.model_custom import DonutConfig, DonutModel
 
 
 class DonutModelPLModule(pl.LightningModule):
@@ -44,6 +47,40 @@ class DonutModelPLModule(pl.LightningModule):
                     # encoder_layer=[2,2,14,2], decoder_layer=4, ...
                 )
             )
+
+        if self.config.get("tokenizer_path", False):
+            tokenizer_path = Path(self.config.tokenizer_path)
+            with open(tokenizer_path / "id_mapper.json") as f:
+                id_mapper = json.load(f)
+
+            tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
+            new_vocab_size = len(tokenizer)
+
+            self.model = self.adapt_donut_model(self.model, id_mapper, new_vocab_size)
+            self.model.decoder.tokenizer = tokenizer
+
+    @staticmethod
+    def adapt_donut_model(model: DonutModel, id_mapper, new_vocab_size: int):
+        sd = model.decoder.model.state_dict()
+
+        # use pretrained donut's embedding for initialization if tokens are matched.
+        for name in [
+            "model.decoder.embed_tokens.weight",
+            "lm_head.weight",
+        ]:
+            src_tensor: torch.Tensor = sd[name]
+            dst_tensor = sd[name].clone()
+            for src_i, dst_i in id_mapper.items():
+                src_i = int(src_i)
+                dst_tensor[dst_i] = src_tensor[src_i]
+            sd[name] = dst_tensor
+
+        model.decoder.model.load_state_dict(sd)
+
+        # `resize_token_embeddings` truncate the embedding from the tail side.
+        model.decoder.model.resize_token_embeddings(new_vocab_size)
+
+        return model
 
     def training_step(self, batch, batch_idx):
         image_tensors, decoder_input_ids, decoder_labels = list(), list(), list()
