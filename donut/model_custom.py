@@ -8,7 +8,7 @@ import math
 import os
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Literal, NamedTuple, Optional, Union
+from typing import Any, Dict, List, Literal, Optional, Union
 
 import numpy as np
 import PIL
@@ -24,6 +24,8 @@ from torchvision.transforms.functional import resize, rotate
 from transformers import MBartConfig, MBartForCausalLM, XLMRobertaTokenizer
 from transformers.file_utils import ModelOutput
 from transformers.modeling_utils import PretrainedConfig, PreTrainedModel
+
+from donut.detection import FieldMetadata
 
 
 class SwinEncoder(nn.Module):
@@ -376,14 +378,6 @@ class BARTDecoder(nn.Module):
                 .permute(1, 0)
             )
         return weight
-
-
-class FieldMetadata(NamedTuple):
-    key: Optional[str] = None
-    value: Optional[str] = None
-    start_index: Optional[int] = None
-    end_index: Optional[int] = None
-    att_indices: Optional[int] = None
 
 
 class DonutConfig(PretrainedConfig):
@@ -784,7 +778,7 @@ class DonutModel(PreTrainedModel):
                         cum_l += l + 1  # +1 for <sep/>
                         assert field.start_index < field.end_index
                         fields_metadata.append(field)
-                elif granularity == "word":  # TODO: not adapted to <sep/>
+                elif granularity == "word":
                     value_text = ""
                     start_index = 0
                     for i, _id in enumerate(content + [tokenizer.eos_token_id]):
