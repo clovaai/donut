@@ -82,21 +82,12 @@ class Detector:
     def __init__(
         self,
         input_size: Tuple[int, int],
-        layer_fuse: Literal[
-            "max",
-            "mean",
-            "shifted-max",
-            "shifted-mean",
-            "final",
-            "shifted-max-3layers",
-            "shifted-mean-3layers",
-        ] = "max",
-        head_fuse: Literal["max", "mean"] = "max",
+        layer_fuse: Literal["max", "mean", "final"] = "final",
+        head_fuse: Literal["max", "mean", "weighted-mean"] = "weighted-mean",
         quality_metric: Literal["std", "max"] = "std",
         topk: int = -1,
         discard_threshold: float = 0.01,
         alpha: float = 8.0,
-        heatmap_scale_factor: float = 1.0,
     ):
         """
         Detect the location of the detected tokens in the original image
@@ -120,7 +111,6 @@ class Detector:
         self.topk = topk
         self.discard_threshold = discard_threshold
         self.alpha = alpha
-        self.heatmap_scale_factor = heatmap_scale_factor
 
     def __call__(
         self,
@@ -156,9 +146,7 @@ class Detector:
             if bbox is None:
                 continue
             score = (
-                confidences[field.start_index : field.end_index].mean()
-                * det_conf
-                / self.heatmap_scale_factor
+                confidences[field.start_index : field.end_index].mean() * det_conf
             ).item()
             bbox, point = self._back_to_orig_coordinate(
                 bbox=bbox,
@@ -181,6 +169,45 @@ class Detector:
             preds=pred_fields,
         )
 
+    def output_original_sized_fused_heatmaps(
+        self,
+        cross_attentions: torch.FloatTensor,  # (num_tokens, num_layers, num_heads, num_patches)
+        orig_image_height: int,
+        orig_image_width: int,
+    ):
+        cross_attentions = self._fuse_layers(
+            cross_attentions
+        )  # (num_tokens - 1, num_heads, num_patches)
+        heatmaps, stride = self._reshape2d_and_resize(cross_attentions)
+
+        heatmaps = self._fuse_heads(heatmaps).unsqueeze(0)
+
+        # back to original image size
+        # 1. back to input_size
+        heatmaps = F.interpolate(
+            heatmaps,
+            size=self.input_size,
+            mode="bilinear",
+            align_corners=False,
+        )
+        # 2. unpad
+        padding = self._calc_padding(orig_image_height, orig_image_width)
+        heatmaps = heatmaps[
+            ...,
+            padding[1] : heatmaps.shape[-2] - padding[3],
+            padding[0] : heatmaps.shape[-1] - padding[2],
+        ]
+        # 3. back to original image size
+        heatmaps = F.interpolate(
+            heatmaps,
+            size=(orig_image_height, orig_image_width),
+            mode="bilinear",
+            align_corners=False,
+        )
+        heatmaps = heatmaps.squeeze(0)
+
+        return heatmaps, stride
+
     def _fuse_layers(self, attentions):
         # final token is for the end of sentence token, so we discard it
         if self.layer_fuse == "max":
@@ -189,14 +216,6 @@ class Detector:
             attentions = attentions[:-1].mean(dim=1)
         elif self.layer_fuse == "final":
             attentions = attentions[:-1, -1]
-        elif self.layer_fuse == "shifted-mean":
-            attentions = torch.cat(
-                [attentions[1:, [0]] + attentions[:-1, [-1]]], dim=1
-            ).mean(dim=1)
-        elif self.layer_fuse == "shifted-mean-3layers":
-            attentions = (
-                attentions[1:, [0]] + attentions[1:, [1]] + attentions[:-1, [-1]]
-            ).mean(dim=1)
         return attentions
 
     def _fuse_heads(self, attentions):
@@ -208,8 +227,10 @@ class Detector:
                 l = attn.shape[0]
                 if self.quality_metric == "std":
                     qualities = (attn + self.EPS).reshape(l, -1).std(dim=-1)
-                else:
+                elif self.quality_metric == "max":
                     qualities = attn.reshape(l, -1).max(dim=-1).values
+                else:
+                    raise NotImplementedError
 
                 topk_attentions.append(
                     attn[qualities.topk(self.topk, largest=True).indices].unsqueeze(0)
@@ -317,89 +338,16 @@ class Detector:
         )
         return padding
 
-    # def output_fused_heatmaps(
-    #     self,
-    #     cross_attentions: torch.FloatTensor,  # (num_tokens, num_layers, num_heads, num_patches)
-    #     # orig_image_height: int,
-    #     # orig_image_width: int,
-    #     scale_factor: float,
-    # ):
-    #     cross_attentions = cross_attentions.clone()
-    #     cross_attentions = self._fuse_layers(
-    #         cross_attentions
-    #     )  # (num_tokens - 1, num_heads, num_patches)
-    #     heatmaps, stride = self._reshape2d_and_resize(cross_attentions)
-
-    #     heatmaps = self._fuse_heads(heatmaps).unsqueeze(0)
-
-    #     # back to original image size
-    #     heatmaps = F.interpolate(
-    #         heatmaps,
-    #         scale_factor=stride * scale_factor,
-    #         mode="bilinear",
-    #         align_corners=False,
-    #     )
-    #     heatmaps = heatmaps.squeeze(0)
-
-    #     return heatmaps, stride
-
-    def output_original_sized_fused_heatmaps(
-        self,
-        cross_attentions: torch.FloatTensor,  # (num_tokens, num_layers, num_heads, num_patches)
-        orig_image_height: int,
-        orig_image_width: int,
-    ):
-        cross_attentions = cross_attentions.clone()
-        cross_attentions = self._fuse_layers(
-            cross_attentions
-        )  # (num_tokens - 1, num_heads, num_patches)
-        heatmaps, stride = self._reshape2d_and_resize(cross_attentions)
-
-        heatmaps = self._fuse_heads(heatmaps).unsqueeze(0)
-
-        # back to original image size
-        # 1. back to input_size
-        heatmaps = F.interpolate(
-            heatmaps,
-            size=self.input_size,
-            mode="bilinear",
-            align_corners=False,
-        )
-        # 2. unpad
-        padding = self._calc_padding(orig_image_height, orig_image_width)
-        heatmaps = heatmaps[
-            ...,
-            padding[1] : heatmaps.shape[-2] - padding[3],
-            padding[0] : heatmaps.shape[-1] - padding[2],
-        ]
-        # 3. back to original image size
-        heatmaps = F.interpolate(
-            heatmaps,
-            size=(orig_image_height, orig_image_width),
-            mode="bilinear",
-            align_corners=False,
-        )
-        heatmaps = heatmaps.squeeze(0)
-
-        return heatmaps, stride
-
     def _reshape2d_and_resize(self, cross_attentions):
         input_height, input_width = self.input_size
         aspect_ratio = input_height / input_width
         num_patches = cross_attentions.shape[-1]
         tw = int((num_patches / aspect_ratio) ** 0.5)
         th = int(tw * aspect_ratio)
-        stride = int(input_width / tw / self.heatmap_scale_factor)
+        stride = int(input_width / tw)
 
         all_heatmaps = cross_attentions.reshape(
             cross_attentions.shape[0], -1, th, tw
         )  # (num_tokens - 1, th, tw)
-        if self.heatmap_scale_factor != 1.0:
-            all_heatmaps = F.interpolate(
-                all_heatmaps,
-                scale_factor=self.heatmap_scale_factor,
-                mode="bilinear",
-                align_corners=False,
-            )
 
         return all_heatmaps, stride
