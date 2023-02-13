@@ -21,7 +21,12 @@ from timm.data.constants import IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD
 from timm.models.swin_transformer import SwinTransformer
 from torchvision import transforms
 from torchvision.transforms.functional import resize, rotate
-from transformers import MBartConfig, MBartForCausalLM, XLMRobertaTokenizer, BertJapaneseTokenizer  # noqa
+from transformers import (
+    MBartConfig,
+    MBartForCausalLM,
+    XLMRobertaTokenizer,
+    BertJapaneseTokenizer,
+)  # noqa
 from transformers.file_utils import ModelOutput
 from transformers.modeling_utils import PretrainedConfig, PreTrainedModel
 
@@ -458,9 +463,7 @@ class DonutModel(PreTrainedModel):
             name_or_path=self.config.name_or_path,
         )
         self.detector = Detector(
-            input_size=config.input_size,
-            discard_threshold=0.01,  # TODO: parameterize
-            alpha=8.0,  # TODO: parameterize
+            input_size=config.input_size,  # TODO: add detector config or something
         )
 
     def forward(
@@ -493,8 +496,8 @@ class DonutModel(PreTrainedModel):
         image_tensors: Optional[torch.Tensor] = None,
         prompt_tensors: Optional[torch.Tensor] = None,
         return_json: bool = True,
-        return_confs: bool = False,
         return_attentions: bool = False,
+        return_dets: bool = False,
     ):
         """
         Generate a token sequence in an auto-regressive manner,
@@ -513,6 +516,8 @@ class DonutModel(PreTrainedModel):
             raise ValueError("Expected either image or image_tensors")
         if all(v is None for v in {prompt, prompt_tensors}):
             raise ValueError("Expected either prompt or prompt_tensors")
+        if return_dets and image is None:
+            raise ValueError("Expected image to return detections")
 
         if image_tensors is None:
             image_tensors = self.encoder.prepare_input(image).unsqueeze(0)
@@ -555,11 +560,10 @@ class DonutModel(PreTrainedModel):
             num_beams=1,
             bad_words_ids=[[self.decoder.tokenizer.unk_token_id]],
             return_dict_in_generate=True,
-            output_attentions=return_attentions,
-            output_scores=return_confs,
+            output_attentions=return_attentions or return_dets,
         )
 
-        output = {"predictions": list(), "sequences": decoder_output.sequences}
+        output = {"predictions": list()}
         for seq in self.decoder.tokenizer.batch_decode(decoder_output.sequences):
             seq = self.postprocess_text(seq, remove_start_token=True)
             if return_json:
@@ -567,20 +571,30 @@ class DonutModel(PreTrainedModel):
             else:
                 output["predictions"].append(seq)
 
-        if return_confs:
-            probs = torch.softmax(torch.cat(decoder_output.scores), dim=-1)
-            output["confidences"] = probs.max(dim=1).values
-
         if return_attentions:
             output["attentions"] = {
                 "self_attentions": decoder_output.decoder_attentions,
-                "cross_attentions": torch.cat(
-                    [
-                        torch.cat(outer).squeeze(2).unsqueeze(0).cpu().float()
-                        for outer in decoder_output.cross_attentions
-                    ]
-                ),
+                "cross_attentions": decoder_output.cross_attentions,
             }
+
+        if return_dets:
+            granularity = "field"  # TODO: parameterize
+            fields_metadata = self.get_fields_metadata(
+                decoder_output.sequences[0, 1:].cpu().tolist(),
+                granularity=granularity,
+            )
+            cross_attentions = torch.cat(
+                [
+                    torch.cat(outer).squeeze(2).unsqueeze(0).cpu().float()
+                    for outer in decoder_output.cross_attentions
+                ]
+            )
+            dets, *_ = self.detector(
+                img=image,
+                cross_attentions=cross_attentions,
+                fields_metadata=fields_metadata,
+            )
+            output["detections"] = dets
 
         return output
 
@@ -703,7 +717,6 @@ class DonutModel(PreTrainedModel):
         cur_offset: int = 0,
         cur_key: str = "",
         granularity: Literal["field", "word"] = "field",
-        flip_value: bool = False,
     ) -> List[FieldMetadata]:
         tokenizer = self.decoder.tokenizer
 
@@ -750,7 +763,6 @@ class DonutModel(PreTrainedModel):
                         cur_offset=open_index + 1 + cur_offset,
                         cur_key=next_key,
                         granularity=granularity,
-                        flip_value=flip_value,
                     )
                 )
             else:  # leafnode:
@@ -770,8 +782,6 @@ class DonutModel(PreTrainedModel):
                                     open_index + 1 + cur_offset + cum_l + ind
                                 )
                         value_text = value_text.strip()
-                        if flip_value:
-                            value_text = value_text[::-1]
                         field = FieldMetadata(
                             key=next_key,
                             value=value_text,
@@ -796,8 +806,6 @@ class DonutModel(PreTrainedModel):
                                     att_indices.append(
                                         open_index + 1 + cur_offset + start_index + ind
                                     )
-                            if flip_value:
-                                value_text = value_text[::-1]
                             field = FieldMetadata(
                                 key=next_key,
                                 value=value_text,
