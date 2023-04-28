@@ -87,8 +87,8 @@ pip install .
 We tested [donut](https://github.com/clovaai/donut) with:
 - [torch](https://github.com/pytorch/pytorch) == 1.11.0+cu113 
 - [torchvision](https://github.com/pytorch/vision) == 0.12.0+cu113
-- [pytorch-lightning](https://github.com/Lightning-AI/lightning) == 1.6.4
-- [transformers](https://github.com/huggingface/transformers) == 4.11.3
+- [pytorch-lightning](https://github.com/Lightning-AI/lightning) == 1.8.5
+- [transformers](https://github.com/huggingface/transformers) == 4.25.1
 - [timm](https://github.com/rwightman/pytorch-image-models) == 0.5.4
 
 ## Getting Started
