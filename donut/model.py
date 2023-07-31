@@ -69,6 +69,7 @@ class SwinEncoder(nn.Module):
             num_heads=[4, 8, 16, 32],
             num_classes=0,
         )
+        self.model.norm = None
 
         # weight init with swin
         if not name_or_path:

@@ -44,6 +44,8 @@ class DonutModelPLModule(pl.LightningModule):
                     # encoder_layer=[2,2,14,2], decoder_layer=4, ...
                 )
             )
+        self.pytorch_lightning_version_is_1 = int(pl.__version__[0]) < 2
+        self.num_of_loaders = len(self.config.dataset_name_or_paths)
 
     def training_step(self, batch, batch_idx):
         image_tensors, decoder_input_ids, decoder_labels = list(), list(), list()
@@ -56,9 +58,16 @@ class DonutModelPLModule(pl.LightningModule):
         decoder_labels = torch.cat(decoder_labels)
         loss = self.model(image_tensors, decoder_input_ids, decoder_labels)[0]
         self.log_dict({"train_loss": loss}, sync_dist=True)
+        if not self.pytorch_lightning_version_is_1:
+            self.log('loss', loss, prog_bar=True)
         return loss
 
-    def validation_step(self, batch, batch_idx, dataset_idx=0):
+    def on_validation_epoch_start(self) -> None:
+        super().on_validation_epoch_start()
+        self.validation_step_outputs = [[] for _ in range(self.num_of_loaders)]
+        return
+
+    def validation_step(self, batch, batch_idx, dataloader_idx=0):
         image_tensors, decoder_input_ids, prompt_end_idxs, answers = batch
         decoder_prompts = pad_sequence(
             [input_id[: end_idx + 1] for input_id, end_idx in zip(decoder_input_ids, prompt_end_idxs)],
@@ -84,17 +93,16 @@ class DonutModelPLModule(pl.LightningModule):
                 self.print(f"    Answer: {answer}")
                 self.print(f" Normed ED: {scores[0]}")
 
+        self.validation_step_outputs[dataloader_idx].append(scores)
+
         return scores
 
-    def validation_epoch_end(self, validation_step_outputs):
-        num_of_loaders = len(self.config.dataset_name_or_paths)
-        if num_of_loaders == 1:
-            validation_step_outputs = [validation_step_outputs]
-        assert len(validation_step_outputs) == num_of_loaders
-        cnt = [0] * num_of_loaders
-        total_metric = [0] * num_of_loaders
-        val_metric = [0] * num_of_loaders
-        for i, results in enumerate(validation_step_outputs):
+    def on_validation_epoch_end(self):
+        assert len(self.validation_step_outputs) == self.num_of_loaders
+        cnt = [0] * self.num_of_loaders
+        total_metric = [0] * self.num_of_loaders
+        val_metric = [0] * self.num_of_loaders
+        for i, results in enumerate(self.validation_step_outputs):
             for scores in results:
                 cnt[i] += len(scores)
                 total_metric[i] += np.sum(scores)
@@ -135,13 +143,6 @@ class DonutModelPLModule(pl.LightningModule):
             return max(0.0, 0.5 * (1.0 + math.cos(math.pi * progress)))
 
         return LambdaLR(optimizer, lr_lambda)
-
-    def get_progress_bar_dict(self):
-        items = super().get_progress_bar_dict()
-        items.pop("v_num", None)
-        items["exp_name"] = f"{self.config.get('exp_name', '')}"
-        items["exp_version"] = f"{self.config.get('exp_version', '')}"
-        return items
 
     @rank_zero_only
     def on_save_checkpoint(self, checkpoint):
