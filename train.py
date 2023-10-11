@@ -157,6 +157,7 @@ def train(config):
         callbacks=[lr_callback, checkpoint_callback, bar],
     )
 
+    torch.set_float32_matmul_precision('high')  # added per output from running the code
     trainer.fit(model_module, data_module, ckpt_path=config.get("resume_from_checkpoint_path", None))
 
 
