@@ -124,6 +124,7 @@ def train(config):
             assert (len(special_tokens) == len([re.match(r"<.*\/>", t) for t in special_tokens])) and \
                    (len(special_tokens) == len(set(special_tokens))), \
                 "special_tokens should be unique and have a form of <.*\/>"
+            print("adding special tokens: ", special_tokens)
             model_module.model.decoder.add_special_tokens(special_tokens)
 
         for split in ["train", "validation"]:
@@ -164,7 +165,7 @@ def train(config):
         dirpath=Path(config.result_path) / config.exp_name / config.exp_version,
         filename="artifacts",
         save_top_k=1,
-        save_last=False,
+        save_last=True,
         mode="min",
     )
 
