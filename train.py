@@ -11,6 +11,7 @@ import random
 from io import BytesIO
 from os.path import basename
 from pathlib import Path
+import re
 
 import numpy as np
 import pytorch_lightning as pl
@@ -120,9 +121,9 @@ def train(config):
 
         if task_name == "fplans":
             special_tokens = config.special_tokens
-            special_tokens = [
-                "<" + token + "/>" for token in special_tokens
-            ]  # format the tokens
+            assert (len(special_tokens) == len([re.match(r"<.*\/>", t) for t in special_tokens])) and \
+                   (len(special_tokens) == len(set(special_tokens))), \
+                "special_tokens should be unique and have a form of <.*\/>"
             model_module.model.decoder.add_special_tokens(special_tokens)
 
         for split in ["train", "validation"]:
