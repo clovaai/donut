@@ -119,7 +119,7 @@ def train(config):
         if task_name == "docvqa":
             model_module.model.decoder.add_special_tokens(["<yes/>", "<no/>"])
 
-        if task_name == "fplans":
+        if task_name == "floorplans":
             special_tokens = config.special_tokens
             assert (len(special_tokens) == len([re.match(r"<.*\/>", t) for t in special_tokens])) and \
                    (len(special_tokens) == len(set(special_tokens))), \
