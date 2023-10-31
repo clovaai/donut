@@ -16,6 +16,7 @@ from nltk import edit_distance
 from torch.utils.data import Dataset
 from transformers.modeling_utils import PreTrainedModel
 from zss import Node
+import time
 
 
 def save_json(write_path: Union[str, bytes, os.PathLike], save_obj: Any):
@@ -70,6 +71,7 @@ class DonutDataset(Dataset):
         for i, sample in enumerate(self.dataset):
             if i % 1 == 0:
                 print(f"preprocessing {i}th sample")
+            print("perf time: " + str(time.perf_counter()))
             ground_truth = json.loads(sample["ground_truth"])
             if "gt_parses" in ground_truth:  # when multiple ground truths are available, e.g., docvqa
                 assert isinstance(ground_truth["gt_parses"], list)
@@ -78,6 +80,7 @@ class DonutDataset(Dataset):
                 assert "gt_parse" in ground_truth and isinstance(ground_truth["gt_parse"], dict)
                 gt_jsons = [ground_truth["gt_parse"]]
 
+            print("perf time: " + str(time.perf_counter()))
             self.gt_token_sequences.append(
                 [
                     task_start_token
@@ -90,6 +93,7 @@ class DonutDataset(Dataset):
                     for gt_json in gt_jsons  # load json from list of json
                 ]
             )
+            print("perf time: " + str(time.perf_counter()))
         print("third (of 3) section of DonutDataset")
         self.donut_model.decoder.add_special_tokens([self.task_start_token, self.prompt_end_token])
         self.prompt_end_token_id = self.donut_model.decoder.tokenizer.convert_tokens_to_ids(self.prompt_end_token)
