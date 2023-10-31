@@ -67,7 +67,9 @@ class DonutDataset(Dataset):
 
         print("second section of DonutDataset")
         self.gt_token_sequences = []
-        for sample in self.dataset:
+        for i, sample in enumerate(self.dataset):
+            if i % 100 == 0:
+                print(f"preprocessing {i}th sample")
             ground_truth = json.loads(sample["ground_truth"])
             if "gt_parses" in ground_truth:  # when multiple ground truths are available, e.g., docvqa
                 assert isinstance(ground_truth["gt_parses"], list)
