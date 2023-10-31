@@ -120,7 +120,7 @@ def train(config):
             model_module.model.decoder.add_special_tokens(["<yes/>", "<no/>"])
 
         if task_name == "floorplans":
-            special_tokens = config.special_tokens
+            special_tokens = config.special_token_name_or_path
             assert (len(special_tokens) == len([re.match(r"<.*\/>", t) for t in special_tokens])) and \
                    (len(special_tokens) == len(set(special_tokens))), \
                 "special_tokens should be unique and have a form of <.*\/>"
