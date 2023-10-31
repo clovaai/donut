@@ -124,6 +124,9 @@ def train(config):
 
         if task_name == "floorplans":
             special_tokens = config.special_token_name_or_path
+            if special_tokens:
+                special_tokens = json.load(open(special_tokens))
+
             print("adding special tokens: ", special_tokens)
 
             assert (len(special_tokens) == len([re.match(r"<.*\/>", t) for t in special_tokens])) and \
