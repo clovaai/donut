@@ -187,6 +187,7 @@ def train(config):
         num_sanity_val_steps=0,
         logger=logger,
         callbacks=[lr_callback, checkpoint_callback, bar],
+        pad_to_multiple_of=config.pad_to_multiple_of,
     )
 
     torch.set_float32_matmul_precision("high")  # added per output from running the code
