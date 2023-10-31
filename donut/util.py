@@ -70,7 +70,7 @@ class DonutDataset(Dataset):
         print("second section of DonutDataset")
         self.gt_token_sequences = []
         for i, sample in enumerate(self.dataset):
-            if i % 1 == 0:
+            if i % 100 == 0:
                 print(f"preprocessing {i}th sample")
             ground_truth = json.loads(sample["ground_truth"])
             if "gt_parses" in ground_truth:  # when multiple ground truths are available, e.g., docvqa
@@ -79,17 +79,24 @@ class DonutDataset(Dataset):
             else:
                 assert "gt_parse" in ground_truth and isinstance(ground_truth["gt_parse"], dict)
                 gt_jsons = [ground_truth["gt_parse"]]
-            print("gt jsons: " + json.dumps(gt_jsons))
             print("perf time: " + str(time.perf_counter()))
-            self.gt_token_sequences.append(
-                [
-                    task_start_token
-                    + self.donut_model.json2token(
+
+            print(len(gt_jsons))
+            gt_json = gt_jsons[0]
+            temp_thing = self.donut_model.json2token(
                         gt_json,
                         update_special_tokens_for_json_key=self.split == "train",
                         sort_json_key=self.sort_json_key,
                     )
-                    + self.donut_model.decoder.tokenizer.eos_token
+            print("perf time: " + str(time.perf_counter()))
+            temp_thing2 = self.donut_model.decoder.tokenizer.eos_token
+
+            print("perf time: " + str(time.perf_counter()))
+            self.gt_token_sequences.append(
+                [
+                    task_start_token
+                    + temp_thing
+                    + temp_thing2
                     for gt_json in gt_jsons  # load json from list of json
                 ]
             )
