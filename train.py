@@ -94,6 +94,8 @@ def train(config):
             dataset_name_or_path
         )  # e.g., cord-v2, docvqa, rvlcdip, ...
 
+        print(f"loading {task_name} dataset")
+
         # add categorical special tokens (optional)
         if task_name == "rvlcdip":
             model_module.model.decoder.add_special_tokens(
