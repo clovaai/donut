@@ -90,13 +90,13 @@ tensorboard==2.14.1
 tensorboard-data-server==0.7.1
 tensorboardX==2.6.2.2
 timm==0.6.13
-tokenizers==0.13.3
+tokenizers==0.14.1
 torch==2.0.1
 torchmetrics==1.2.0
 torchvision==0.15.2
 tqdm==4.66.1
 traitlets==5.10.0
-transformers==4.33.2
+transformers==4.34.1
 typing_extensions==4.8.0
 tzdata==2023.3
 urllib3==2.0.5
