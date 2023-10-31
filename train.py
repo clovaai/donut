@@ -94,7 +94,8 @@ def train(config):
             dataset_name_or_path
         )  # e.g., cord-v2, docvqa, rvlcdip, ...
 
-        print(f"loading {task_name} dataset")
+        print(dataset_name_or_path)
+        print(task_name)
 
         # add categorical special tokens (optional)
         if task_name == "rvlcdip":
