@@ -510,8 +510,9 @@ class DonutModel(PreTrainedModel):
                 else:
                     keys = obj.keys()
                 for k in keys:
-                    if update_special_tokens_for_json_key:
-                        self.decoder.add_special_tokens([fr"<s_{k}>", fr"</s_{k}>"])
+                    new_special_tokens = [rf"<s_{k}>", rf"</s_{k}>"]
+                    if len(set(new_special_tokens) - set(self.decoder.tokenizer.all_special_tokens)) > 0:
+                        self.decoder.add_special_tokens(new_special_tokens)
                     output += (
                         fr"<s_{k}>"
                         + self.json2token(obj[k], update_special_tokens_for_json_key, sort_json_key)
