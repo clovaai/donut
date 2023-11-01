@@ -95,9 +95,11 @@ def train(config):
                 "<form/>", "<handwritten/>", "<invoice/>", "<letter/>", 
                 "<memo/>", "<news_article/>", "<presentation/>", "<questionnaire/>", 
                 "<resume/>", "<scientific_publication/>", "<scientific_report/>", "<specification/>"
-            ])
+            ],
+            replace_additional_special_tokens=False
+            )
         if task_name == "docvqa":
-            model_module.model.decoder.add_special_tokens(["<yes/>", "<no/>"])
+            model_module.model.decoder.add_special_tokens(["<yes/>", "<no/>"], replace_additional_special_tokens=False)
             
         for split in ["train", "validation"]:
             datasets[split].append(
