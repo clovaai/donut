@@ -65,7 +65,9 @@ class DonutDataset(Dataset):
         self.dataset_length = len(self.dataset)
 
         self.gt_token_sequences = []
-        for sample in self.dataset:
+        for i, sample in enumerate(self.dataset):
+            if i % 100 == 0:
+                print(f"preprocessing {i}/{self.dataset_length} samples")
             ground_truth = json.loads(sample["ground_truth"])
             if "gt_parses" in ground_truth:  # when multiple ground truths are available, e.g., docvqa
                 assert isinstance(ground_truth["gt_parses"], list)
@@ -87,7 +89,7 @@ class DonutDataset(Dataset):
                 ]
             )
 
-        self.donut_model.decoder.add_special_tokens([self.task_start_token, self.prompt_end_token])
+        self.donut_model.decoder.add_special_tokens([self.task_start_token, self.prompt_end_token], replace_additional_special_tokens=True)
         self.prompt_end_token_id = self.donut_model.decoder.tokenizer.convert_tokens_to_ids(self.prompt_end_token)
 
     def __len__(self) -> int:

@@ -1,0 +1,23 @@
+resume_from_checkpoint_path: null # only used for resume_from_checkpoint option in PL
+result_path: "./result"
+pretrained_model_name_or_path: "naver-clova-ix/donut-base" # loading a pre-trained model (from moldehub or path)
+dataset_name_or_paths: ["/Users/bhall/Documents/coding_projects/realest-agent/data/planify/data_processed/20231030_154834/floorplans"] # loading datasets (from moldehub or path) -- must not end in "/" !!
+sort_json_key: True
+train_batch_sizes: [1]  # reduce if OOMs (min 1)
+val_batch_sizes: [1]
+input_size: [1280, 1280] # when the input resolution differs from the pre-training setting, some weights will be newly initialized (but the model training would be okay)
+max_length: 1280
+align_long_axis: False
+num_nodes: 1
+seed: 2022
+lr: 3e-5
+warmup_steps: 300 # 800/8*30/10, 10%
+num_training_samples_per_epoch: 800
+max_epochs: 30
+max_steps: -1
+num_workers: 3 # should be <= number of CPUs
+val_check_interval: 1.0
+check_val_every_n_epoch: 3
+gradient_clip_val: 1.0
+verbose: True
+special_token_name_or_path: "/Users/bhall/Documents/coding_projects/realest-agent/data/planify/data_processed/20231030_154834/floorplans/special_tokens.json"

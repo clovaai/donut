@@ -11,7 +11,6 @@ import random
 from io import BytesIO
 from os.path import basename
 from pathlib import Path
-import re
 
 import numpy as np
 import pytorch_lightning as pl
@@ -34,9 +33,7 @@ class CustomCheckpointIO(CheckpointIO):
     def load_checkpoint(self, path, storage_options=None):
         checkpoint = torch.load(path + "artifacts.ckpt")
         state_dict = torch.load(path + "pytorch_model.bin")
-        checkpoint["state_dict"] = {
-            "model." + key: value for key, value in state_dict.items()
-        }
+        checkpoint["state_dict"] = {"model." + key: value for key, value in state_dict.items()}
         return checkpoint
 
     def remove_checkpoint(self, path) -> None:
@@ -77,7 +74,6 @@ def set_seed(seed):
         pl.utilities.seed.seed_everything(seed, workers=True)
     else:
         import lightning_fabric
-
         lightning_fabric.utilities.seed.seed_everything(seed, workers=True)
 
 
@@ -90,51 +86,19 @@ def train(config):
     # add datasets to data_module
     datasets = {"train": [], "validation": []}
     for i, dataset_name_or_path in enumerate(config.dataset_name_or_paths):
-        task_name = os.path.basename(
-            dataset_name_or_path
-        )  # e.g., cord-v2, docvqa, rvlcdip, ...
-
-        print(dataset_name_or_path)
-        print(task_name)
-
+        task_name = os.path.basename(dataset_name_or_path)  # e.g., cord-v2, docvqa, rvlcdip, ...
+        
         # add categorical special tokens (optional)
         if task_name == "rvlcdip":
-            model_module.model.decoder.add_special_tokens(
-                [
-                    "<advertisement/>",
-                    "<budget/>",
-                    "<email/>",
-                    "<file_folder/>",
-                    "<form/>",
-                    "<handwritten/>",
-                    "<invoice/>",
-                    "<letter/>",
-                    "<memo/>",
-                    "<news_article/>",
-                    "<presentation/>",
-                    "<questionnaire/>",
-                    "<resume/>",
-                    "<scientific_publication/>",
-                    "<scientific_report/>",
-                    "<specification/>",
-                ]
-            )
+            model_module.model.decoder.add_special_tokens([
+                "<advertisement/>", "<budget/>", "<email/>", "<file_folder/>", 
+                "<form/>", "<handwritten/>", "<invoice/>", "<letter/>", 
+                "<memo/>", "<news_article/>", "<presentation/>", "<questionnaire/>", 
+                "<resume/>", "<scientific_publication/>", "<scientific_report/>", "<specification/>"
+            ])
         if task_name == "docvqa":
             model_module.model.decoder.add_special_tokens(["<yes/>", "<no/>"])
-
-        if task_name == "floorplans":
-            special_tokens = config.special_token_name_or_path
-            if special_tokens:
-                special_tokens = json.load(open(special_tokens))
-
-            print("adding special tokens: ", special_tokens)
-
-            assert (len(special_tokens) == len([re.match(r"<.*\/>", t) for t in special_tokens])) and \
-                   (len(special_tokens) == len(set(special_tokens))), \
-                "special_tokens should be unique and have a form of <.*\/>"
-
-            model_module.model.decoder.add_special_tokens(special_tokens)
-
+            
         for split in ["train", "validation"]:
             datasets[split].append(
                 DonutDataset(
@@ -142,14 +106,10 @@ def train(config):
                     donut_model=model_module.model,
                     max_length=config.max_length,
                     split=split,
-                    task_start_token=(
-                        config.task_start_tokens[i]
-                        if config.get("task_start_tokens", None)
-                        else f"<s_{task_name}>"
-                    ),
-                    prompt_end_token="<s_answer>"
-                    if "docvqa" in dataset_name_or_path
+                    task_start_token=config.task_start_tokens[i]
+                    if config.get("task_start_tokens", None)
                     else f"<s_{task_name}>",
+                    prompt_end_token="<s_answer>" if "docvqa" in dataset_name_or_path else f"<s_{task_name}>",
                     sort_json_key=config.sort_json_key,
                 )
             )
@@ -173,7 +133,7 @@ def train(config):
         dirpath=Path(config.result_path) / config.exp_name / config.exp_version,
         filename="artifacts",
         save_top_k=1,
-        save_last=True,
+        save_last=False,
         mode="min",
     )
 
@@ -197,12 +157,7 @@ def train(config):
         callbacks=[lr_callback, checkpoint_callback, bar],
     )
 
-    torch.set_float32_matmul_precision("high")  # added per output from running the code
-    trainer.fit(
-        model_module,
-        data_module,
-        ckpt_path=config.get("resume_from_checkpoint_path", None),
-    )
+    trainer.fit(model_module, data_module, ckpt_path=config.get("resume_from_checkpoint_path", None))
 
 
 if __name__ == "__main__":
@@ -215,13 +170,7 @@ if __name__ == "__main__":
     config.argv_update(left_argv)
 
     config.exp_name = basename(args.config).split(".")[0]
-    config.exp_version = (
-        datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        if not args.exp_version
-        else args.exp_version
-    )
+    config.exp_version = datetime.datetime.now().strftime("%Y%m%d_%H%M%S") if not args.exp_version else args.exp_version
 
-    save_config_file(
-        config, Path(config.result_path) / config.exp_name / config.exp_version
-    )
+    save_config_file(config, Path(config.result_path) / config.exp_name / config.exp_version)
     train(config)
