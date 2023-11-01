@@ -16,8 +16,6 @@ from nltk import edit_distance
 from torch.utils.data import Dataset
 from transformers.modeling_utils import PreTrainedModel
 from zss import Node
-import time
-import json
 
 
 def save_json(write_path: Union[str, bytes, os.PathLike], save_obj: Any):
@@ -55,7 +53,6 @@ class DonutDataset(Dataset):
     ):
         super().__init__()
 
-        print("first section of DonutDataset")
         self.donut_model = donut_model
         self.max_length = max_length
         self.split = split
@@ -67,7 +64,6 @@ class DonutDataset(Dataset):
         self.dataset = load_dataset(dataset_name_or_path, split=self.split)
         self.dataset_length = len(self.dataset)
 
-        print("second section of DonutDataset")
         self.gt_token_sequences = []
         for sample in self.dataset:
             ground_truth = json.loads(sample["ground_truth"])
@@ -91,10 +87,8 @@ class DonutDataset(Dataset):
                 ]
             )
 
-        print("third (of 3) section of DonutDataset")
         self.donut_model.decoder.add_special_tokens([self.task_start_token, self.prompt_end_token])
         self.prompt_end_token_id = self.donut_model.decoder.tokenizer.convert_tokens_to_ids(self.prompt_end_token)
-        # self.donut_model.resize_token_embeddings(None, 128)  # added to improve perf on CUDA per output from running training   
 
     def __len__(self) -> int:
         return self.dataset_length
