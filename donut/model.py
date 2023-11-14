@@ -176,7 +176,7 @@ class BARTDecoder(nn.Module):
         self.model.forward = self.forward  #  to get cross attentions and utilize `generate` function
 
         self.model.config.is_encoder_decoder = True  # to get cross-attention
-        self.add_special_tokens(["<sep/>"])  # <sep/> is used for representing a list in a JSON
+        self.add_special_tokens(["<sep/>"], replace_additional_special_tokens=False)  # <sep/> is used for representing a list in a JSON
         self.model.model.decoder.embed_tokens.padding_idx = self.tokenizer.pad_token_id
         self.model.prepare_inputs_for_generation = self.prepare_inputs_for_inference
 
@@ -199,11 +199,14 @@ class BARTDecoder(nn.Module):
                     new_bart_state_dict[x] = bart_state_dict[x]
             self.model.load_state_dict(new_bart_state_dict)
 
-    def add_special_tokens(self, list_of_tokens: List[str]):
+    def add_special_tokens(self, list_of_tokens: List[str], replace_additional_special_tokens=False):
         """
         Add special tokens to tokenizer and resize the token embeddings
         """
-        newly_added_num = self.tokenizer.add_special_tokens({"additional_special_tokens": sorted(set(list_of_tokens))})
+        if len(set(list_of_tokens) - set(self.tokenizer.all_special_tokens)) > 0:
+            newly_added_num = self.tokenizer.add_special_tokens({"additional_special_tokens": sorted(set(list_of_tokens))}, replace_additional_special_tokens=replace_additional_special_tokens)
+        else:
+            newly_added_num = 0
         if newly_added_num > 0:
             self.model.resize_token_embeddings(len(self.tokenizer))
 
@@ -510,8 +513,7 @@ class DonutModel(PreTrainedModel):
                 else:
                     keys = obj.keys()
                 for k in keys:
-                    if update_special_tokens_for_json_key:
-                        self.decoder.add_special_tokens([fr"<s_{k}>", fr"</s_{k}>"])
+                    self.decoder.add_special_tokens([rf"<s_{k}>", rf"</s_{k}>"], replace_additional_special_tokens=False)
                     output += (
                         fr"<s_{k}>"
                         + self.json2token(obj[k], update_special_tokens_for_json_key, sort_json_key)

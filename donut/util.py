@@ -87,7 +87,7 @@ class DonutDataset(Dataset):
                 ]
             )
 
-        self.donut_model.decoder.add_special_tokens([self.task_start_token, self.prompt_end_token])
+        self.donut_model.decoder.add_special_tokens([self.task_start_token, self.prompt_end_token], replace_additional_special_tokens=False)
         self.prompt_end_token_id = self.donut_model.decoder.tokenizer.convert_tokens_to_ids(self.prompt_end_token)
 
     def __len__(self) -> int:
