@@ -30,9 +30,9 @@ setup(
     description="OCR-free Document Understanding Transformer",
     long_description=read_long_description(),
     long_description_content_type="text/markdown",
-    author="Geewook Kim, Teakgyu Hong, Moonbin Yim, JeongYeon Nam, Jinyoung Park, Jinyeong Yim, Wonseok Hwang, Sangdoo Yun, Dongyoon Han, Seunghyun Park",
-    author_email="gwkim.rsrch@gmail.com",
-    url="https://github.com/clovaai/donut",
+    author="Geewook Kim, Teakgyu Hong, Moonbin Yim, JeongYeon Nam, Jinyoung Park, Jinyeong Yim, Wonseok Hwang, Sangdoo Yun, Dongyoon Han, Seunghyun Park, Matteo Cacciola",
+    author_email="gwkim.rsrch@gmail.com, matteo.cacciola@gmail.com",
+    url="https://github.com/clovaai/donut, https://github.com/matteocacciola/donut",
     license="MIT",
     packages=find_packages(
         exclude=[
@@ -50,7 +50,7 @@ setup(
     ),
     python_requires=">=3.7",
     install_requires=[
-        "transformers>=4.11.3",
+        "transformers>=4.21.1",
         "timm",
         "datasets[vision]",
         "pytorch-lightning>=1.6.4",

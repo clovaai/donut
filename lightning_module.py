@@ -192,7 +192,7 @@ class DonutDataPLModule(pl.LightningDataModule):
         return loaders
 
     @staticmethod
-    def seed_worker(wordker_id):
+    def seed_worker(worker_id):
         worker_seed = torch.initial_seed() % 2 ** 32
         np.random.seed(worker_seed)
         random.seed(worker_seed)

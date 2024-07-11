@@ -6,16 +6,13 @@ MIT License
 import argparse
 import json
 import os
-import re
-from pathlib import Path
 
 import numpy as np
 import torch
 from datasets import load_dataset
-from PIL import Image
 from tqdm import tqdm
 
-from donut import DonutModel, JSONParseEvaluator, load_json, save_json
+from donut import DonutModel, JSONParseEvaluator, save_json
 
 
 def test(args):

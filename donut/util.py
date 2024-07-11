@@ -71,8 +71,13 @@ class DonutDataset(Dataset):
                 assert isinstance(ground_truth["gt_parses"], list)
                 gt_jsons = ground_truth["gt_parses"]
             else:
-                assert "gt_parse" in ground_truth and isinstance(ground_truth["gt_parse"], dict)
-                gt_jsons = [ground_truth["gt_parse"]]
+                assert "gt_parse" in ground_truth and (
+                    isinstance(ground_truth["gt_parse"], dict) or
+                    isinstance(ground_truth["gt_parse"], list)
+                )
+                gt_jsons = [ground_truth["gt_parse"]] if isinstance(
+                    ground_truth["gt_parse"], dict
+                ) else ground_truth["gt_parse"]
 
             self.gt_token_sequences.append(
                 [
