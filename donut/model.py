@@ -477,6 +477,7 @@ class DonutModel(PreTrainedModel):
             bad_words_ids=[[self.decoder.tokenizer.unk_token_id]],
             return_dict_in_generate=True,
             output_attentions=return_attentions,
+            output_scores=True,
         )
 
         output = {"predictions": list()}
@@ -494,6 +495,16 @@ class DonutModel(PreTrainedModel):
                 "cross_attentions": decoder_output.cross_attentions,
             }
 
+        # calcuate confidences
+        gen_sequences = decoder_output.sequences[:, prompt_tensors.shape[-1]:-1]
+        probs = torch.stack(decoder_output.scores, dim=1).softmax(-1)
+        gen_probs = torch.gather(probs, 2, gen_sequences[:, :, None]).squeeze(-1)
+        gen_probs = gen_probs.float()
+        gen_log_probs = gen_probs.log()
+        avg_log_prob_per_sequence = gen_log_probs.mean(-1)
+        sequence_confidences = avg_log_prob_per_sequence.exp()
+
+        output["scores"] = sequence_confidences.tolist()[0]
         return output
 
     def json2token(self, obj: Any, update_special_tokens_for_json_key: bool = True, sort_json_key: bool = True):
