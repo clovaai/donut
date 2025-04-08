@@ -98,6 +98,12 @@ class SwinEncoder(nn.Module):
             x: (batch_size, num_channels, height, width)
         """
         x = self.model.patch_embed(x)
+        if hasattr(self.model, "pos_drop"):
+            x = self.model.pos_drop(x)
+        else:
+            # apply a dropout logic instead of using a deprecated nn.Model method
+            import torch.nn.functional as F
+            x = F.dropout(x, p=0.1, training=self.training)
         x = self.model.pos_drop(x)
         x = self.model.layers(x)
         return x

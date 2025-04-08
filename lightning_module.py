@@ -118,7 +118,7 @@ class DonutModelPLModule(pl.LightningModule):
         if int(self.config.get("max_epochs", -1)) > 0:
             assert len(self.config.train_batch_sizes) == 1, "Set max_epochs only if the number of datasets is 1"
             max_iter = (self.config.max_epochs * self.config.num_training_samples_per_epoch) / (
-                self.config.train_batch_sizes[0] * torch.cuda.device_count() * self.config.get("num_nodes", 1)
+                self.config.train_batch_sizes[0] * self.config.get("devices", torch.cuda.device_count()) * self.config.get("num_nodes", 1)
             )
 
         if int(self.config.get("max_steps", -1)) > 0:
