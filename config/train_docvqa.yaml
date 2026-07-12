@@ -1,4 +1,4 @@
-resume_from_checkpoint_path: null 
+resume_from_checkpoint_path: null
 result_path: "./result"
 pretrained_model_name_or_path: "naver-clova-ix/donut-base"
 dataset_name_or_paths: ["./dataset/docvqa"] # should be prepared from https://rrc.cvc.uab.es/?ch=17

@@ -1,5 +1,5 @@
 <div align="center">
-    
+
 # Donut 🍩 : Document Understanding Transformer
 
 [![Paper](https://img.shields.io/badge/Paper-arxiv.2111.15664-red)](https://arxiv.org/abs/2111.15664)
@@ -15,7 +15,7 @@ Official Implementation of Donut and SynthDoG | [Paper](https://arxiv.org/abs/21
 
 ## Introduction
 
-**Donut** 🍩, **Do**cume**n**t **u**nderstanding **t**ransformer, is a new method of document understanding that utilizes an OCR-free end-to-end Transformer model. Donut does not require off-the-shelf OCR engines/APIs, yet it shows state-of-the-art performances on various visual document understanding tasks, such as visual document classification or information extraction (a.k.a. document parsing). 
+**Donut** 🍩, **Do**cume**n**t **u**nderstanding **t**ransformer, is a new method of document understanding that utilizes an OCR-free end-to-end Transformer model. Donut does not require off-the-shelf OCR engines/APIs, yet it shows state-of-the-art performances on various visual document understanding tasks, such as visual document classification or information extraction (a.k.a. document parsing).
 In addition, we present **SynthDoG** 🐶, **Synth**etic **Do**cument **G**enerator, that helps the model pre-training to be flexible on various languages and domains.
 
 Our academic paper, which describes our method in detail and provides full experimental results and analyses, can be found here:<br>
@@ -87,7 +87,7 @@ pip install .
 ```
 
 We tested [donut-python](https://pypi.org/project/donut-python/1.0.1) == 1.0.1 with:
-- [torch](https://github.com/pytorch/pytorch) == 1.11.0+cu113 
+- [torch](https://github.com/pytorch/pytorch) == 1.11.0+cu113
 - [torchvision](https://github.com/pytorch/vision) == 0.12.0+cu113
 - [pytorch-lightning](https://github.com/Lightning-AI/lightning) == 1.6.4
 - [transformers](https://github.com/huggingface/transformers) == 4.11.3
@@ -158,16 +158,16 @@ The `gt_parse` looks like `{"text_sequence" : "word1 word2 word3 ... "}`
 
 ### Training
 
-This is the configuration of Donut model training on [CORD](https://github.com/clovaai/cord) dataset used in our experiment. 
+This is the configuration of Donut model training on [CORD](https://github.com/clovaai/cord) dataset used in our experiment.
 We ran this with a single NVIDIA A100 GPU.
 
 ```bash
 python train.py --config config/train_cord.yaml \
                 --pretrained_model_name_or_path "naver-clova-ix/donut-base" \
                 --dataset_name_or_paths '["naver-clova-ix/cord-v2"]' \
-                --exp_version "test_experiment"    
+                --exp_version "test_experiment"
   .
-  .                                                                                                                                                                                                                                         
+  .
 Prediction: <s_menu><s_nm>Lemon Tea (L)</s_nm><s_cnt>1</s_cnt><s_price>25.000</s_price></s_menu><s_total><s_total_price>25.000</s_total_price><s_cashprice>30.000</s_cashprice><s_changeprice>5.000</s_changeprice></s_total>
 Answer: <s_menu><s_nm>Lemon Tea (L)</s_nm><s_cnt>1</s_cnt><s_price>25.000</s_price></s_menu><s_total><s_total_price>25.000</s_total_price><s_cashprice>30.000</s_cashprice><s_changeprice>5.000</s_changeprice></s_total>
 Normed ED: 0.0
@@ -176,7 +176,7 @@ Answer: <s_menu><s_nm>Hulk Topper Package</s_nm><s_cnt>1</s_cnt><s_price>100.000
 Normed ED: 0.0
 Prediction: <s_menu><s_nm>Giant Squid</s_nm><s_cnt>x 1</s_cnt><s_price>Rp. 39.000</s_price><s_sub><s_nm>C.Finishing - Cut</s_nm><s_price>Rp. 0</s_price><sep/><s_nm>B.Spicy Level - Extreme Hot Rp. 0</s_price></s_sub><sep/><s_nm>A.Flavour - Salt & Pepper</s_nm><s_price>Rp. 0</s_price></s_sub></s_menu><s_sub_total><s_subtotal_price>Rp. 39.000</s_subtotal_price></s_sub_total><s_total><s_total_price>Rp. 39.000</s_total_price><s_cashprice>Rp. 50.000</s_cashprice><s_changeprice>Rp. 11.000</s_changeprice></s_total>
 Answer: <s_menu><s_nm>Giant Squid</s_nm><s_cnt>x1</s_cnt><s_price>Rp. 39.000</s_price><s_sub><s_nm>C.Finishing - Cut</s_nm><s_price>Rp. 0</s_price><sep/><s_nm>B.Spicy Level - Extreme Hot</s_nm><s_price>Rp. 0</s_price><sep/><s_nm>A.Flavour- Salt & Pepper</s_nm><s_price>Rp. 0</s_price></s_sub></s_menu><s_sub_total><s_subtotal_price>Rp. 39.000</s_subtotal_price></s_sub_total><s_total><s_total_price>Rp. 39.000</s_total_price><s_cashprice>Rp. 50.000</s_cashprice><s_changeprice>Rp. 11.000</s_changeprice></s_total>
-Normed ED: 0.039603960396039604                                                                                                                                  
+Normed ED: 0.039603960396039604
 Epoch 29: 100%|█████████████| 200/200 [01:49<00:00,  1.82it/s, loss=0.00327, exp_name=train_cord, exp_version=test_experiment]
 ```
 
