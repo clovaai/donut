@@ -1,0 +1,80 @@
+# Mặt hàng quán ăn / cửa hàng Việt Nam
+# Định dạng: tên<TAB>giá tối thiểu<TAB>giá tối đa   (đơn vị VND)
+Phở bò tái	35000	75000
+Phở bò chín	35000	75000
+Phở gà	35000	70000
+Bún bò Huế	40000	80000
+Bún chả	40000	75000
+Bún riêu cua	35000	65000
+Bún thịt nướng	40000	70000
+Bún đậu mắm tôm	50000	95000
+Bún cá	40000	70000
+Bún mọc	35000	65000
+Bún sing	35000	60000
+Hủ tiếu Nam Vang	40000	80000
+Hủ tiếu khô	40000	75000
+Mì Quảng	45000	85000
+Mì xào giòn	50000	95000
+Mì gói xào chay	30000	55000
+Miến gà	35000	65000
+Cháo lòng	30000	55000
+Cháo gà	35000	60000
+Cơm tấm sườn bì chả	45000	90000
+Cơm gà xối mỡ	50000	95000
+Cơm chiên dương châu	55000	110000
+Cơm chiên hải sản	65000	130000
+Cơm bát bửu	40000	60000
+Cơm trắng	5000	15000
+Sườn chiên khìa dừa	55000	120000
+Sườn xào chua ngọt	70000	140000
+Gà kho gừng	75000	150000
+Gà rang muối	95000	190000
+Thịt kho tàu	65000	130000
+Cá kho tộ	80000	170000
+Cá diêu hồng hấp	150000	320000
+Tôm lăn bột	65000	140000
+Tôm rang me	120000	260000
+Mực xào thơm	110000	230000
+Mực chiên giòn	95000	200000
+Lẩu thái hải sản	250000	550000
+Lẩu gà lá é	220000	450000
+Bò lúc lắc	120000	250000
+Bò xào cần tỏi	95000	190000
+Rau muống xào tỏi	40000	80000
+Cải thìa sốt dầu hào	45000	85000
+Canh chua cá lóc	70000	150000
+Canh khổ qua nhồi thịt	60000	120000
+Đậu hũ chiên sả	40000	80000
+Trứng chiên	30000	60000
+Chả giò	45000	90000
+Gỏi cuốn	35000	70000
+Bánh xèo	45000	90000
+Bánh mì thịt	20000	45000
+Bánh canh cua	45000	85000
+Xôi gà	25000	50000
+Nem nướng	55000	110000
+Khoai tây chiên	35000	65000
+Trà đá	2000	5000
+Trà nóng	5000	12000
+Trà chanh	15000	30000
+Trà tắc	15000	30000
+Trà sữa trân châu	30000	55000
+Cà phê đen	15000	40000
+Cà phê sữa	18000	45000
+Bạc xỉu	20000	50000
+Nước suối	8000	15000
+Pepsi	8000	20000
+Coca Cola	8000	20000
+Sting	10000	22000
+7Up	8000	20000
+Nước cam ép	25000	50000
+Sinh tố bơ	30000	55000
+Nước mía	12000	25000
+Bia Sài Gòn	18000	35000
+Bia Tiger	20000	40000
+Bia 333	18000	35000
+Chè thái	20000	40000
+Sữa chua nếp cẩm	20000	40000
+Kem dừa	25000	50000
+Khăn lạnh	3000	8000
+Cơm thêm	5000	15000

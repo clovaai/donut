@@ -1,0 +1,120 @@
+# SynthDoG-VN — hoá đơn bán lẻ Việt Nam (máy in nhiệt)
+# synthtiger -o ./outputs/VNReceipt -c 100 -w 4 -v template_receipt.py SynthVNReceipt config_vi_receipt.yaml
+
+quality: [50, 95]
+short_size: [720, 1024]
+canvas_fill: [0.55, 0.95]      # tờ hoá đơn chiếm bao nhiêu chiều cao khung ảnh
+canvas_aspect: [1.0, 1.9]      # cao / rộng của khung ảnh
+label_format: parse            # 'parse' = gt_parse lồng nhau | 'text' = đọc trơn
+
+receipt:
+  margin: [0.03, 0.10]
+  line_spacing: [1.05, 1.50]
+  ink: [0, 90]                 # độ đậm mực, 0 = đen kịt
+
+  font:
+    paths: [resources/font/vi]
+    size: [20, 38]             # để lớn rồi thu nhỏ ở cuối -> chữ nét
+    bold: 0.25
+
+  content:
+    corpus: resources/corpus/vi
+    num_items: [2, 14]
+    ascii_fold: 0.6            # xác suất bỏ dấu (máy in nhiệt đời cũ)
+    uppercase: 0.7
+    prob_address: 0.9
+    prob_phone: 0.8
+    prob_table: 0.5
+    prob_meta: 0.85
+    prob_subtotal: 0.35
+    prob_vat: 0.30
+    prob_discount: 0.15
+    prob_cash: 0.45
+    prob_unit_price: 0.5
+    num_footers: [0, 3]
+
+  layout:
+    ncols: [32, 48]            # bề rộng giấy tính theo số ký tự
+    wrap_name: 0.5
+    two_line_item: 0.35
+    big_total: 0.7
+    big_header: 0.8
+
+paper:
+  image:
+    paths: [resources/paper]
+    weights: [1]
+    alpha: [0, 0.15]
+    grayscale: 1
+    crop: 1
+
+background:
+  image:
+    paths: [resources/background]
+    weights: [1]
+  effect:
+    args:
+      # gaussian blur — nền mờ như chụp lấy nét vào tờ giấy
+      - prob: 1
+        args:
+          sigma: [0, 10]
+
+# cong giấy — biến dạng phi tuyến NHƯNG toạ độ vẫn map lại được
+curl:
+  prob: 0.85
+  shift: [0.0, 0.030]
+  squeeze: [0.0, 0.080]
+  wave: [0.0, 0.010]
+  periods_y: [0.4, 2.0]
+  periods_x: [0.3, 0.8]
+
+# hiệu ứng mức tài liệu (áp lên chữ + giấy cùng lúc)
+doc_effect:
+  args:
+    # elastic distortion
+    - prob: 1
+      args:
+        alpha: [0, 1]
+        sigma: [0, 0.5]
+    # gaussian noise
+    - prob: 1
+      args:
+        scale: [0, 8]
+        per_channel: 0
+    # perspective
+    - prob: 1
+      args:
+        percents: [[0.80, 1], [0.80, 1], [0.80, 1], [0.80, 1]]
+
+# hiệu ứng mức toàn ảnh (sau khi ghép nền)
+effect:
+  args:
+    # color
+    - prob: 0.2
+      args:
+        rgb: [[0, 255], [0, 255], [0, 255]]
+        alpha: [0, 0.2]
+    # shadow
+    - prob: 1
+      args:
+        intensity: [0, 160]
+        amount: [0, 1]
+        smoothing: [0.5, 1]
+        bidirectional: 0
+    # contrast
+    - prob: 1
+      args:
+        alpha: [1, 1.5]
+    # brightness
+    - prob: 1
+      args:
+        beta: [-48, 0]
+    # motion blur
+    - prob: 0.5
+      args:
+        k: [3, 5]
+        angle: [0, 360]
+    # gaussian blur
+    - prob: 1
+      args:
+        sigma: [0, 1.5]
