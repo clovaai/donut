@@ -1,0 +1,29 @@
+# SynthDoG-VN — sinh ảnh hoá đơn Việt Nam
+#
+#   python -m venv .venv && source .venv/bin/activate
+#   pip install -U pip setuptools wheel      # BẮT BUỘC, xem ghi chú cuối file
+#   pip install -r requirements.txt
+#
+# Các mốc chặn trên đều là do lỗi thật, không phải cẩn thận thừa:
+
+synthtiger==1.2.1
+
+# synthtiger 1.2.1 gọi ImageFont.getsize(), API này bị xoá ở Pillow 10.
+# Không chặn -> AttributeError, mà synthtiger nuốt exception rồi retry vô hạn
+# nên chương trình treo im lặng (chạy với -v mới thấy traceback).
+pillow<10
+
+# imgaug (synthtiger phụ thuộc) dùng np.sctypes, bị xoá ở NumPy 2.
+numpy<2
+
+# opencv-python>=5 yêu cầu numpy>=2, xung đột với dòng trên.
+opencv-python<5
+
+# dùng cho tools/check_fonts.py (synthtiger cũng đã kéo về sẵn)
+fonttools>=4.0
+
+# GHI CHÚ VỀ pytweening
+# synthtiger phụ thuộc pytweening, gói này build từ source. Với setuptools bản
+# vá của Debian/Ubuntu, build hỏng: "AttributeError: install_layout".
+# Cách xử lý: cài trong venv rồi `pip install -U setuptools` trước — venv dùng
+# setuptools mới nên build trót lọt. Đừng cài vào python hệ thống.
