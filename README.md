@@ -13,6 +13,20 @@ Official Implementation of Donut and SynthDoG | [Paper](https://arxiv.org/abs/21
 
 </div>
 
+---
+
+> ### 🧾 SynthDoG-VN — Vietnamese receipt generator (fork addition)
+>
+> This fork adds a synthtiger template that generates **Vietnamese retail receipts**
+> with structured labels, for training Donut on receipt information extraction.
+>
+> - **[Hướng dẫn cài đặt và chạy (tiếng Việt)](HUONG_DAN.md)** — requirements, setup, run
+> - **[Tài liệu template hoá đơn](synthdog/README_vi_receipt.md)** — architecture and options
+>
+> ![Vietnamese receipt samples](synthdog/docs/samples/receipts.jpg)
+
+---
+
 ## Introduction
 
 **Donut** 🍩, **Do**cume**n**t **u**nderstanding **t**ransformer, is a new method of document understanding that utilizes an OCR-free end-to-end Transformer model. Donut does not require off-the-shelf OCR engines/APIs, yet it shows state-of-the-art performances on various visual document understanding tasks, such as visual document classification or information extraction (a.k.a. document parsing). 
